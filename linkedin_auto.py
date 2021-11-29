@@ -37,7 +37,7 @@ options.add_experimental_option("excludeSwitches",["enable-automation"])
 options.add_experimental_option("useAutomationExtension",False)
 
 
-driver = webdriver.Chrome(executable_path='chromedriver.exe',options = options)
+driver = webdriver.Chrome(executable_path='./chromedriver.exe',options = options)
 
 
  #launch url
@@ -51,32 +51,30 @@ I had learned many essential skills with a good experience that will assist me i
 If you allow me to send you my CV."""]
 
 limite = 20
-#limite for each time
 
 search_words = "production manager"
 
 driver.get(url)
+try:
+    email = driver.find_element_by_id("session_key")
+    password = driver.find_element_by_id("session_password")
+    submit   = driver.find_element_by_css_selector("button.sign-in-form__submit-button")
 
-# Comment me later
+    #Empty fields if there are empty
+    email.send_keys(Keys.CONTROL, 'a')
+    email.send_keys(Keys.DELETE)
+    password.send_keys(Keys.CONTROL, 'a')
+    password.send_keys(Keys.DELETE)
 
-email = driver.find_element_by_id("session_key")
-password = driver.find_element_by_id("session_password")
-submit   = driver.find_element_by_css_selector("button.sign-in-form__submit-button")
+    time.sleep(3)
 
-#Empty fields if there are empty
-email.send_keys(Keys.CONTROL, 'a')
-email.send_keys(Keys.DELETE)
-password.send_keys(Keys.CONTROL, 'a')
-password.send_keys(Keys.DELETE)
-
-time.sleep(3)
-
-email.send_keys("youremail@email.com")
-password.send_keys("YOUR_PASSWORD")
-time.sleep(3)
-submit.click()
-
-#End of comment
+    email.send_keys("youremail@email.com")
+    password.send_keys("YOUR_PASSWORD")
+    time.sleep(3)
+    submit.click()
+except:
+    println('Already logged in')
+    pass
 
 time.sleep(4)
 
@@ -98,9 +96,9 @@ def sendToPpls(persons):
         try:
             time.sleep(random.randint(minn, maxx))
             try:
-                inpgoress = person.find_element_by_css_selector('.artdeco-button.artdeco-button--2.artdeco-button--secondary.ember-view.artdeco-button--muted')
+                connect = person.find_element_by_css_selector('.artdeco-button.artdeco-button--2.artdeco-button--secondary.ember-view.artdeco-button--muted')
                 minn, maxx = 2 , 5
-                println("waiting to accept")
+                println("en attente")
                 continue
             except:
                 connect = person.find_element_by_css_selector('.artdeco-button.artdeco-button--2.artdeco-button--secondary.ember-view')
@@ -157,7 +155,8 @@ def nextPage(dle=False):
 
     WebDriverWait(driver=driver, timeout=10).until(
         lambda x: x.execute_script("return document.readyState === 'complete'"))
-
+    # driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+    # time.sleep(3)
     startY, height = people_page(driver)
     step = (height - startY)*0.01
     for l in numpy.arange(startY, height, step): ##slow scroll through product page
